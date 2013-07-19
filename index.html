@@ -36,6 +36,236 @@
 		<div class="reveal">
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
+                          <section>
+                            <h2>A confession</h2>
+                            <p class="fragment" data-fragment-index="0">I'm not going to talk about placing things into other things</p>
+                            
+                          </section>
+                          <section>
+                            
+                            <em>"New Shit has come to light"</em>
+                            <p> -- Jeffrey Lebowski</p>                            
+                          </section>
+                          <section>
+                            <h3>Instead, I'm going to talk to you about the CLI</h3>
+                            <p>(comand line interface)</p>
+                          </section>
+                          <section>
+                            <h3> Yes. CLI.</h3>
+                          </section>
+                          <section>
+                            <h3> The CLI is the Developer UX </h3>
+                          </section>
+                          <section>
+                            <h2>To all the gems I've loved before</h2>
+                            <blockquote>Slop, Trollop, Mixlib, Map, Optitron, Rake, Thor, GLI, and even good old OptionParser</blockquote>
+                          </section>
+                          <section>
+                            <h3>When it's good, it's good</h3>
+                          </section>
+                          <section>
+                            <h3>And then comes the hangover</h3>
+                          </section>
+                          <section>
+                            <h2>What went wrong?</h2>
+                          </section>
+                          <section>
+                            <h1>Output</h1>
+                          </section>
+                          <section>
+                            <h2>I have given a name to to my pain</h2>
+                            <p class="fragment">and it is puts()</p>
+                          </section>
+                          <section>
+                            <h3>how do you share calls to puts()?</h3>
+                          </section>
+                          <section>
+                            <h3>How do you share code that formats text?</h3>
+                          </section>
+                          <section>
+                            <h3>Example: Help</h3>
+                            <pre><code data-trim class="console">
+$ jenkins -h nodes
+usage: jenkins nodes
+
+    --host [HOST]          	  connect to jenkins server on this host
+    --port [PORT]          	  connect to jenkins server on this port
+    --ssl                  	  connect to jenkins server with ssl
+    --username [USERNAME]  	  connect to jenkins server with username
+    --password [PASSWORD]  	  connect to jenkins server with password
+                             </code></pre>
+                          </section>
+                          <section>
+                            <h3>layout?</h3>
+                            <pre><code data-trim contenteditable class="ruby">
+class CLI < Thor
+  module Formatting
+    module ClassMethods
+      def task_help(shell, task_name)
+        meth = normalize_task_name(task_name)
+        task = all_tasks[meth]
+        handle_no_task_error(meth) unless task
+      
+        shell.say "usage: #{banner(task)}"
+        shell.say
+        class_options_help(shell, nil => task.options.map { |_, o| o })
+      end
+      ...
+    end
+  end
+end
+                            </code></pre>
+                          </section>
+                          <section>
+                            <h2>Embed streams into other streams</h2>
+                            <ul>
+                              <li class="fragment">with an indentation prefix</li>
+                              <li class="fragment">with control characters</li>
+                            </ul>
+                          </section>
+                          <section>
+                            <h3>Capistrano is beautiful... Until it's ugly</h3>
+                            <pre><code data-trim class="console">
+** [out :: 198.61.173.225] Using rake (10.1.0)
+** [out :: 198.61.173.225]
+** [out :: 198.61.173.225] Using i18n (0.6.1)
+** [out :: 198.61.173.225]
+** [out :: 198.61.173.225] Using multi_json (1.7.7)
+** [out :: 198.61.173.225]
+** [out :: 198.61.173.225] Using activesupport (3.2.13)
+** [out :: 198.61.173.225]
+** [out :: 198.61.173.225] Using builder (3.0.4)
+                            </code></pre>
+                          </section>
+                          <section>
+                            <h3>Do progress bars need to be hard?</h3>
+                            <pre><code class="console">
+Fetching: rumm-0.0.18.gem (100%)
+Successfully installed rumm-0.0.18
+</code></pre>
+                          </section>
+                          <section>
+                            <h2>What went wrong?</h2>
+                          </section>
+                          <section>
+                            <h1>Decoding and Validation</h1>
+                          </section>
+                          <section>
+                            <h3>Strings are the squishy goo of the software</h3>
+                          </section>
+                          <section>
+                            <h3>We don't want goo, we want objects<h3>
+                          </section>
+                          <section>                            
+                            <p style="margin-bottom: 40px">
+                              'home/cowboyd' <span class="fragment" style="font-weight: bold; font-size: 125%;">=> #&lt;Pathname:/home/cowboyd&gt; </span>
+                            </p>
+                            <p class="fragment"><span class="blue">decoder:</span> <code class="ruby">Pathname()</code></p>
+                          </section>
+                          <section>                            
+                            <p style="margin-bottom: 40px">
+                              '198.61.173.225' <span class="fragment" style="font-weight: bold; font-size: 125%;">=>#&lt;IPAddr: IPv4:198.61.173.225&gt; </span>
+                            </p>
+                            <p class="fragment"><span class="blue">decoder:</span> <code class="ruby">IPAddr.new()</code></p>
+                          </section>
+                          <section>                            
+                            <p style="margin-bottom: 40px">
+                              'cowboyd@thefrontside.net' <span class="fragment" style="font-weight: bold; font-size: 125%;">=> #&lt;User id: 1></span>
+                            </p>
+                            <p class="fragment"><span class="blue">decoder:</span> <code class="ruby">User.find_by_email()</code></p>
+                          </section>
+                          <section>
+                            <h3>Well formed objects aren't enough</h3>
+                            <p>
+                              They need to be valid in the bounded context in which they are being used
+                            </p>
+                          </section>
+                          <section>
+                            <h3>Decoding and Validation are separate concerns</h3>
+                          </section>
+                          <section>
+                            <h3>Chomsky's classic example</h3>
+                            <blockquote>Colorless green dreams sleep furiously</blockquote>
+                            <p class="fragment">this is well-formed nonsense</p>
+                          </section>
+                          <section>
+                            <h3>Objects can be well formed nonsense too</h3>                       
+                          </section>
+                          <section>
+                            <h3>Well formed. But valid?</h3>
+                            <p>#&lt;Pathname:/home/cowboyd></p>
+                            <ul>
+                              <li class="fragment"><code>.exist?</code></li>
+                              <li class="fragment"><code>.basename == user.username</code></li>
+                            </ul>
+                          </section>
+                          <section>
+                            <h3>Current tools are scant help with Decode/Validate</h3>
+                            <p>As a community, we have a horrible bias towards the output side of things to the neglect of the input</p>
+                          </section>
+                          <section>
+                            <h3>smart data == smart programs</h3>
+                          </section>
+                          <section>
+                            <h1>No Plugin Architecure</h1>
+                          </section>
+                          <section>
+                            <h2>Only so much program can fit into a single program</h2>                            
+                          </section>
+                          <section>
+                            <h2>every sufficiently complex CLI will need this</h2>
+                            <ul>
+                              <li class="fragment">think rubygems, vagrant, heroku</li>
+                            </ul>
+                          </section>
+                          <section>
+                            <h2>every sufficiently complex program will need this</h2>
+                            <ul>
+                              <li>Rails Engines</li>
+                              <li>Jenkins Plugins</li>
+                              <li>Textmate Bundles</li>
+                            </ul>
+                          </section>
+                          <section>
+                            <h3>Ok, time for plugins. What do I need?</h3>
+                            <ul>
+                              <li class="fragment">discovery (search)</li>
+                              <li class="fragment">download, verify and install</li>
+                              <li class="fragment">register/activate at runtime</li>
+                              <li class="fragment">configure</li>
+                              <li class="fragment">uninstall</li>
+                            </ul>
+                          </section>
+                          <section>
+                            <h2>UUUUUUUHHHUUUUUUUUGGGGGGG</h2>
+                          </section>
+                          <section>
+                            <h2>I could go on and on whinging...</h2>
+                          </section>
+                          <section>
+                            <h2>Suffice it to say</h2>
+                            <p><code class="ruby">OptParser::DSL != Framework</code></p>
+                          </section>
+                          <section>
+                            <h2>Suffice it to say</h2>
+                            <p>Option parsing is a solved problem. It's the other 98% of the application that sucks</p>
+                          </section>
+                          <section>
+                            <h2>Fast Forward to 6 weeks ago</h2>
+                          </section>
+                          <section>
+                            <h2><em>rumm</em>: A tastly tool for pirates and hackers</h2>
+                          </section>
+                          <section>
+                            <h2>All Purpose CLI for Rackspace</h2>
+                            <p>(contains every gotcha mentioned above)</p>
+                          </section>
+                          <section>
+                            <h2>Big API, large surface area</h2>
+                          </section>
+                          <section>
+                            <h2>Plugins required</h2>
+                          </section>
 				<section>
 					<h1>Reveal.js</h1>
 					<h3>HTML Presentations Made Easy</h3>
