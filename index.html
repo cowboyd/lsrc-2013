@@ -264,7 +264,7 @@ Successfully installed rumm-0.0.18
                             <h2>Fast Forward to 6 weeks ago</h2>
                           </section>
                           <section>
-                            <h2><em>rumm</em>: A tastly tool for pirates and hackers</h2>
+                            <img src="images/rumm-color.png"/>
                           </section>
                           <section>
                             <h2>All Purpose CLI for Rackspace</h2>
@@ -275,6 +275,119 @@ Successfully installed rumm-0.0.18
                           </section>
                           <section>
                             <h2>Plugins required</h2>
+                          </section>
+                          <section>
+                            <h2>What to do?</h2>
+                            <p class="fragment">Attack!</p>
+                          </section>
+                          <section>
+                            <h1>Output</h1>
+                          </section>
+                          <section>
+                            <h2>Contextualize the streams!</h2>
+                          </section>
+                          <section>
+                            <h2>Step 1. Middlewares</h2>
+                          </section>
+                          <section>
+                            <h2>Middlewares?</h2>
+                          </section>
+                          <section>
+                            <h2>Yes. Middlewares.</h2>
+                          </section>
+                          <section>
+                            <h2>What's in the middle?</h2>
+                            <pre><code class="ruby">
+class Command
+  attr_reader :argv, :input, :output, :log, :env
+
+  def initialize(argv, input, output, log, env)
+    @argv, @input, @output, @log, @env = argv, input, output, log, env
+  end
+end</code></pre>
+                            <p>A Command</p>
+                          </section>
+                          <section>
+                            <h2>The API</h2>
+                            <pre><code class="ruby">
+def call(command)
+  # do stuff before
+  yield command #invoke next middleware
+  # do stuff after
+end
+</code></pre>
+                          </section>
+                          <section>
+                            <h2>Each middleware controls all downstream streams</h2>
+                          </section>
+                          <section>
+                            <h2>Emoji!</h2>
+                            <pre><code class="ruby">
+def call(cmd)
+  yield Command.new(cmd.argv, cmd.input, EmojiFilter.new(cmd.output), cmd.env)
+end</code></pre>
+                          </section>
+                          <section>
+                            <h2>Step 2. Templates</h2>
+                          </section>
+                          <section>
+                            <h2>Templates?</h2>
+                          </section>
+                          <section>
+                            <h2>Yes. Templates</h2>
+                          </section>
+                          <section>
+                            <h2>Achieve re-use with layouts and partials</h2>
+                          </section>
+                          <section>
+                            <h2>Help Redux</h2>
+                            <pre><code data-trim contenteditable class="ruby">
+class CLI < Thor
+  module Formatting
+    module ClassMethods
+      def task_help(shell, task_name)
+        meth = normalize_task_name(task_name)
+        task = all_tasks[meth]
+        handle_no_task_error(meth) unless task
+      
+        shell.say "usage: #{banner(task)}"
+        shell.say
+        class_options_help(shell, nil => task.options.map { |_, o| o })
+      end
+      ...
+    end
+  end
+end
+                            </code></pre>                            
+                          </section>
+                          <section>
+                            <h2>You decide</h2>
+<pre><code class="erb">
+usage: <%= banner task %>
+
+<% indent 4 do %>
+  <%= render 'options' %>
+<% end %>
+
+</pre></code>
+                          </section>
+                          <section>
+                            <h2>Templates are for streaming!</h2>
+                            <ul>
+                              <li class="fragment">templates further contextualize output</li>
+                              <li class="fragment">streaming components</li>
+                            </ul>
+                          </section>
+                          <section>
+                            <h2>Progress bars are for templates!</h2>
+<pre><code class="erb">
+Fetching: <%= gem.filename %> <%= gem.progress %>
+Successfully installed <%= gem.name %>
+
+</code></pre>
+                          </section>
+                          <section>
+                            <h2>Templates: Use 'em!</h2>
                           </section>
 				<section>
 					<h1>Reveal.js</h1>
